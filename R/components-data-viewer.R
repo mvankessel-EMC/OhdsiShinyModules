@@ -360,7 +360,7 @@ fuzzySearch<- reactable::JS('function(rows, columnIds, filterValue) {
         shiny::validate(shiny::need(hasData(data), "No data for selection"))
         # set row height based on nchar of table
         l <- max(apply(data, 1, function(x) max(nchar(x))), na.rm = T) < 120
-        if (l | is.null(l) | is.na(l)) {
+        if (l | is.null(l) | is.na(l) | l == -Inf) {
           height <- 40*3
         } else {
           height <- NULL
