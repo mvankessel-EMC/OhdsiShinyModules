@@ -128,7 +128,7 @@ estimationCreateCmPlot <- function(data) {
     # shade the bayesian 
     ggplot2::geom_rect(
       data =  metadata %>% dplyr::filter(.data$target == !!target),
-      ggplot2::aes(fill = .data$database),
+      ggplot2::aes(fill = .data$databaseId),
       xmin = -Inf,
       xmax = Inf,
       ymin = -Inf,
@@ -137,7 +137,7 @@ estimationCreateCmPlot <- function(data) {
     ) +
     
     ggplot2::coord_cartesian(xlim = c(0.1, 10)) + 
-    ggplot2::facet_grid(.data$databaseName ~ .data$description)  +
+    ggplot2::facet_grid(.data$databaseId ~ .data$description)  +
     ggplot2::ggtitle(title) +
     ggplot2::theme(
       axis.title.y = ggplot2::element_blank(),
