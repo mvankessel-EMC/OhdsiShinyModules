@@ -135,7 +135,7 @@ estimationCreateSccsPlot <- function(data) {
     # shade the bayesian 
     ggplot2::geom_rect(
       data =  metadata  %>% dplyr::filter(.data$indication == !!indication),
-      ggplot2::aes(fill = .data$database),
+      ggplot2::aes(fill = .data$databaseName),
       xmin = -Inf,
       xmax = Inf,
       ymin = -Inf,
