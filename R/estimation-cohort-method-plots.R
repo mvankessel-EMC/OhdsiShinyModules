@@ -137,7 +137,7 @@ estimationCreateCmPlot <- function(data) {
     ) +
     
     ggplot2::coord_cartesian(xlim = c(0.1, 10)) + 
-    ggplot2::facet_grid(.data$database ~ .data$description)  +
+    ggplot2::facet_grid(.data$databaseName ~ .data$description)  +
     ggplot2::ggtitle(title) +
     ggplot2::theme(
       axis.title.y = ggplot2::element_blank(),
