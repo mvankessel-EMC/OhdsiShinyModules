@@ -79,7 +79,7 @@ estimationCreateSccsPlot <- function(data) {
   
   # make sure bayesian is at top
   db <- unique(data$database)
-  bInd <- grep('bayesian', tolower(db))
+  bInd <- grep("((bayesian)|(normal))", tolower(db))
   withoutb <- db[-bInd]
   b <- db[bInd]
   data$database <- factor(
@@ -135,7 +135,7 @@ estimationCreateSccsPlot <- function(data) {
     # shade the bayesian 
     ggplot2::geom_rect(
       data =  metadata  %>% dplyr::filter(.data$indication == !!indication),
-      ggplot2::aes(fill = .data$databaseName),
+      ggplot2::aes(fill = .data$database),
       xmin = -Inf,
       xmax = Inf,
       ymin = -Inf,
@@ -144,7 +144,7 @@ estimationCreateSccsPlot <- function(data) {
     ) +
     
     ggplot2::coord_cartesian(xlim = c(0.1, 10)) + 
-    ggplot2::facet_grid(.data$databaseName ~ .data$shortName)  +
+    ggplot2::facet_grid(.data$database ~ .data$shortName)  +
     ggplot2::ggtitle(indication) +
     ggplot2::theme(
       axis.title.y = ggplot2::element_blank(),

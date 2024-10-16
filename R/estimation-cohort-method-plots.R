@@ -46,6 +46,7 @@ estimationCreateCmPlot <- function(data) {
     shiny::showNotification('No results to plot')
     return(NULL)
   }
+  browser()
   data$database <- data$cdmSourceAbbreviation
 
   if(is.null(data$comparator)){
@@ -73,7 +74,7 @@ estimationCreateCmPlot <- function(data) {
   
   # make sure bayesian is at top
   db <- unique(data$database)
-  bInd <- grep('bayesian', tolower(db))
+  bInd <- grep("((bayesian)|(normal))", tolower(db))
   withoutb <- db[-bInd]
   b <- db[bInd]
   data$database <- factor(
@@ -103,16 +104,16 @@ estimationCreateCmPlot <- function(data) {
   plotList <- list(tbl) # adding table first
   
   for(target in unique(data$target)){ # per targets
-    
+    print(data)
   title <- sprintf("%s", target)
-  plotList[[length(plotList) + 1]] <- ggplot2::ggplot(
+  gg <- ggplot2::ggplot(
     data = data %>% dplyr::filter(.data$target == !!target),
     ggplot2::aes(x = .data$calibratedRr, y = .data$shortName)) +
     ggplot2::geom_vline(xintercept = 1, size = 0.5) +
     ggplot2::geom_point(color = "#000088", alpha = 0.8) +
     ggplot2::geom_errorbarh(
       ggplot2::aes(
-        xmin = .data$calibratedCi95Lb, 
+        xmin = .data$calibratedCi95Lb,
         xmax = .data$calibratedCi95Ub
       ), 
       height = 0.5, 
@@ -128,7 +129,7 @@ estimationCreateCmPlot <- function(data) {
     # shade the bayesian 
     ggplot2::geom_rect(
       data =  metadata %>% dplyr::filter(.data$target == !!target),
-      ggplot2::aes(fill = .data$databaseId),
+      ggplot2::aes(fill = .data$database),
       xmin = -Inf,
       xmax = Inf,
       ymin = -Inf,
@@ -137,14 +138,18 @@ estimationCreateCmPlot <- function(data) {
     ) +
     
     ggplot2::coord_cartesian(xlim = c(0.1, 10)) + 
-    ggplot2::facet_grid(.data$databaseId ~ .data$description)  +
+    ggplot2::facet_grid(.data$database ~ .data$description)  +
     ggplot2::ggtitle(title) +
     ggplot2::theme(
+      plot.title = ggplot2::element_text(size = 10),
+      axis.title.x = ggplot2::element_text(size = 10),
       axis.title.y = ggplot2::element_blank(),
       panel.grid.minor = ggplot2::element_blank(),
       strip.text.y.right = ggplot2::element_text(angle = 0), 
       legend.position = "none"
-    ) 
+    )
+
+  plotList[[length(plotList) + 1]] <- gg
   }
   
   plot <- do.call(
